@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
-using UnityEngine.InputSystem.LowLevel;
-using UnityEngine.TextCore.Text;
-using static PEAKSleepTalk.EnableSleepTalkPatch.PlayerConsciousnessManager;
 
 namespace PEAKSleepTalk
 {
@@ -63,7 +60,7 @@ namespace PEAKSleepTalk
             [HarmonyPatch(typeof(AnimatedMouth), nameof(AnimatedMouth.ProcessMicData))]
             private static void Prefix(AnimatedMouth __instance, out bool __state)
             {
-                ConsciousState state = PlayerConsciousnessManager.UpdateAndGet(__instance.character);
+                PlayerConsciousnessManager.ConsciousState state = PlayerConsciousnessManager.UpdateAndGet(__instance.character);
                 bool canTalk = Time.time - state.startTime >= cooldownTime;
                 __state = __instance.character.data.passedOut;
 
@@ -84,7 +81,7 @@ namespace PEAKSleepTalk
         public class CharacterVoicePatch
         {
             [HarmonyPatch(typeof(CharacterVoiceHandler), nameof(CharacterVoiceHandler.Update))]
-            private static void Prefix(CharacterVoiceHandler __instance, out ConsciousState __state)
+            private static void Prefix(CharacterVoiceHandler __instance, out PlayerConsciousnessManager.ConsciousState __state)
             {
                 FieldInfo CharacterField = AccessTools.Field(typeof(CharacterVoiceHandler), "m_character");
                 Character character = (Character)CharacterField.GetValue(__instance);
@@ -107,7 +104,7 @@ namespace PEAKSleepTalk
             }
 
             [HarmonyPatch(typeof(CharacterVoiceHandler), nameof(CharacterVoiceHandler.Update))]
-            private static void Postfix(CharacterVoiceHandler __instance, ConsciousState __state)
+            private static void Postfix(CharacterVoiceHandler __instance, PlayerConsciousnessManager.ConsciousState __state)
             {
                 // restore unconscious state
                 FieldInfo CharacterField = AccessTools.Field(typeof(CharacterVoiceHandler), "m_character");
