@@ -11,3 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Patch to keep mouth animating when a player is passed out
 - Patch to continue to allow voice when a player is passed out but at a lower volume
+
+## [0.1.0] - 2025-07-04
+
+- 8 second cooldown before player can speak
+- Initial Thunderstore package release
