@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
+
 namespace PEAKSleepTalk
 {
     internal class EnableSleepTalkPatch
@@ -64,7 +65,7 @@ namespace PEAKSleepTalk
                 bool canTalk = Time.time - state.startTime >= cooldownTime;
                 __state = __instance.character.data.passedOut;
 
-                if (canTalk && (__instance.character.data.passedOut || __instance.character.data.fullyPassedOut))
+                if (canTalk && !__instance.character.data.dead && (__instance.character.data.passedOut || __instance.character.data.fullyPassedOut))
                 {    
                     __instance.character.data.passedOut = false;
                 }
@@ -89,7 +90,7 @@ namespace PEAKSleepTalk
                 __state = PlayerConsciousnessManager.UpdateAndGet(character);
                 bool canTalk = Time.time - __state.startTime >= cooldownTime;
 
-                if(canTalk && (character.data.passedOut || character.data.fullyPassedOut))
+                if(canTalk && !character.data.dead && (character.data.passedOut || character.data.fullyPassedOut))
                 {
                     character.data.passedOut = false;
                     character.data.fullyPassedOut = false;
@@ -112,7 +113,7 @@ namespace PEAKSleepTalk
                 character.data.passedOut = __state.passedOut;
                 character.data.fullyPassedOut = __state.fullyPassedOut;
 
-                if (character.data.passedOut || character.data.fullyPassedOut)
+                if (!character.data.dead && (character.data.passedOut || character.data.fullyPassedOut))
                 {
                     // restore audio level
                     FieldInfo audioLevelField = AccessTools.Field(typeof(CharacterVoiceHandler), "audioLevel");
