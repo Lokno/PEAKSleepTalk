@@ -26,3 +26,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - added configuration file to tweak values
 - added option to turn off volume deduction in settings
 - added option to turn off quiet time in settings
+- simplified code when accessing public members
