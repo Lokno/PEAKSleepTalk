@@ -1,5 +1,5 @@
 [config]
-schemaVersion = "0.1.1"
+schemaVersion = "0.2.0"
 
 [general]
 repository = "https://thunderstore.io"
@@ -7,7 +7,7 @@ repository = "https://thunderstore.io"
 [package]
 namespace = "Lokno"
 name = "PEAKSleepTalk"
-description = "Allow passed out players to talk at a reduced volume after 8 seconds."
+description = "Allow passed out players to talk at a reduced volume after a short period."
 websiteUrl = "https://github.com/Lokno/PEAKSleepTalk"
 containsNsfwContent = false
 

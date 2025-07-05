@@ -8,8 +8,6 @@ namespace PEAKSleepTalk
 {
     internal class EnableSleepTalkPatch
     {
-        const float cooldownTime = 8f;
-        const float audioLevelReductionFactor = 0.2f;
         static float audioLevel = 0.5f;
 
         public static class PlayerConsciousnessManager
@@ -62,7 +60,7 @@ namespace PEAKSleepTalk
             private static void Prefix(AnimatedMouth __instance, out bool __state)
             {
                 PlayerConsciousnessManager.ConsciousState state = PlayerConsciousnessManager.UpdateAndGet(__instance.character);
-                bool canTalk = Time.time - state.startTime >= cooldownTime;
+                bool canTalk = !ConfigurationManager.EnableQuietTime || (Time.time - state.startTime >= ConfigurationManager.QuietTimeDuration);
                 __state = __instance.character.data.passedOut;
 
                 if (canTalk && !__instance.character.data.dead && (__instance.character.data.passedOut || __instance.character.data.fullyPassedOut))
@@ -88,9 +86,9 @@ namespace PEAKSleepTalk
                 Character character = (Character)CharacterField.GetValue(__instance);
 
                 __state = PlayerConsciousnessManager.UpdateAndGet(character);
-                bool canTalk = Time.time - __state.startTime >= cooldownTime;
+                bool canTalk = !ConfigurationManager.EnableQuietTime || (Time.time - __state.startTime >= ConfigurationManager.QuietTimeDuration);
 
-                if(canTalk && !character.data.dead && (character.data.passedOut || character.data.fullyPassedOut))
+                if (canTalk && !character.data.dead && character.data.fullyConscious&& (character.data.passedOut || character.data.fullyPassedOut))
                 {
                     character.data.passedOut = false;
                     character.data.fullyPassedOut = false;
@@ -98,9 +96,12 @@ namespace PEAKSleepTalk
                     FieldInfo audioLevelField = AccessTools.Field(typeof(CharacterVoiceHandler), "audioLevel");
                     audioLevel = (float)audioLevelField.GetValue(__instance);
 
-                    // reduce volume for passed out characters
-                    float newAudioLevel = audioLevel * audioLevelReductionFactor;
-                    audioLevelField.SetValue(__instance, newAudioLevel);
+                    if(ConfigurationManager.ReduceVolume)
+                    {
+                        // reduce volume for passed out characters
+                        float newAudioLevel = audioLevel * ConfigurationManager.VolumeReductionFactor;
+                        audioLevelField.SetValue(__instance, newAudioLevel);
+                    }
                 }
             }
 

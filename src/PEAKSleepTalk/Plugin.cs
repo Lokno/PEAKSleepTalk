@@ -16,6 +16,8 @@ public partial class Plugin : BaseUnityPlugin
         // Log our awake here so we can see it in LogOutput.log file
         Log.LogInfo($"Plugin {Name} is loaded: Allow passed out scouts to speak");
 
+        ConfigurationManager.LoadConfig(this);
+
         var harmony = new Harmony(Id);
         harmony.PatchAll();
     }

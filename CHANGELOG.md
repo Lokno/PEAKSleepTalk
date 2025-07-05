@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 8 second cooldown before player can speak
 - Initial Thunderstore package release
 
-## [0.1.1] - 2025-07-05
+## [0.1.1] - 2025-07-04
 
 - fixed a logical oversight that affected speaking when dead
+
+## [0.2.0] - 2025-07-04
+
+- added configuration file to tweak values
+- added option to turn off volume deduction in settings
+- added option to turn off quiet time in settings
