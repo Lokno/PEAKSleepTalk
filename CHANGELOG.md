@@ -27,3 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - added option to turn off volume deduction in settings
 - added option to turn off quiet time in settings
 - simplified code when accessing public members
+
+## [0.2.1] - 2025-07-05
+
+- fix for mistake in 0.2.0 which broke the voice activation logic

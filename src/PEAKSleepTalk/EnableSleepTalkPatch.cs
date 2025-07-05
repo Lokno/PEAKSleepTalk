@@ -75,18 +75,27 @@ namespace PEAKSleepTalk
         [HarmonyPatch(typeof(CharacterVoiceHandler))]
         public class CharacterVoicePatch
         {
-            static float audioLevel = 0.5f;
+            public class StoreData
+            {
+                public PlayerConsciousnessManager.ConsciousState state = null!;
+                public float audioLevel = 0.5f;
+            }
 
             [HarmonyPatch(typeof(CharacterVoiceHandler), nameof(CharacterVoiceHandler.Update))]
-            private static void Prefix(CharacterVoiceHandler __instance, out PlayerConsciousnessManager.ConsciousState __state)
+            private static void Prefix(CharacterVoiceHandler __instance, out StoreData __state)
             {
                 Character character = __instance.m_character;
-                audioLevel = __instance.audioLevel;
+                float audioLevel = __instance.audioLevel;
 
-                __state = PlayerConsciousnessManager.UpdateAndGet(character);
-                bool canTalk = !ConfigurationManager.EnableQuietTime || (Time.time - __state.startTime >= ConfigurationManager.QuietTimeDuration);
+                __state = new StoreData
+                {
+                    state = PlayerConsciousnessManager.UpdateAndGet(character),
+                    audioLevel = audioLevel
+                };
 
-                if (canTalk && !character.data.dead && character.data.fullyConscious&& (character.data.passedOut || character.data.fullyPassedOut))
+                bool canTalk = !ConfigurationManager.EnableQuietTime || (Time.time - __state.state.startTime >= ConfigurationManager.QuietTimeDuration);
+
+                if (canTalk && !character.data.dead && (character.data.passedOut || character.data.fullyPassedOut))
                 {
                     character.data.passedOut = false;
                     character.data.fullyPassedOut = false;
@@ -99,14 +108,14 @@ namespace PEAKSleepTalk
             }
 
             [HarmonyPatch(typeof(CharacterVoiceHandler), nameof(CharacterVoiceHandler.Update))]
-            private static void Postfix(CharacterVoiceHandler __instance, PlayerConsciousnessManager.ConsciousState __state)
+            private static void Postfix(CharacterVoiceHandler __instance, StoreData __state)
             {
                 // restore unconscious state
-                __instance.m_character.data.passedOut = __state.passedOut;
-                __instance.m_character.data.fullyPassedOut = __state.fullyPassedOut;
+                __instance.m_character.data.passedOut = __state.state.passedOut;
+                __instance.m_character.data.fullyPassedOut = __state.state.fullyPassedOut;
 
                 // restore audio level
-                __instance.audioLevel = audioLevel;
+                __instance.audioLevel = __state.audioLevel;
             }
         }
     }
