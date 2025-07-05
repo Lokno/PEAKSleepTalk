@@ -1,14 +1,11 @@
 ﻿using HarmonyLib;
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
 
 namespace PEAKSleepTalk
 {
     internal class EnableSleepTalkPatch
     {
-        static float audioLevel = 0.5f;
-
         public static class PlayerConsciousnessManager
         {
             public class ConsciousState
@@ -78,11 +75,13 @@ namespace PEAKSleepTalk
         [HarmonyPatch(typeof(CharacterVoiceHandler))]
         public class CharacterVoicePatch
         {
+            static float audioLevel = 0.5f;
+
             [HarmonyPatch(typeof(CharacterVoiceHandler), nameof(CharacterVoiceHandler.Update))]
             private static void Prefix(CharacterVoiceHandler __instance, out PlayerConsciousnessManager.ConsciousState __state)
             {
-                FieldInfo CharacterField = AccessTools.Field(typeof(CharacterVoiceHandler), "m_character");
-                Character character = (Character)CharacterField.GetValue(__instance);
+                Character character = __instance.m_character;
+                audioLevel = __instance.audioLevel;
 
                 __state = PlayerConsciousnessManager.UpdateAndGet(character);
                 bool canTalk = !ConfigurationManager.EnableQuietTime || (Time.time - __state.startTime >= ConfigurationManager.QuietTimeDuration);
@@ -92,14 +91,9 @@ namespace PEAKSleepTalk
                     character.data.passedOut = false;
                     character.data.fullyPassedOut = false;
 
-                    FieldInfo audioLevelField = AccessTools.Field(typeof(CharacterVoiceHandler), "audioLevel");
-                    audioLevel = (float)audioLevelField.GetValue(__instance);
-
                     if(ConfigurationManager.ReduceVolume)
                     {
-                        // reduce volume for passed out characters
-                        float newAudioLevel = audioLevel * ConfigurationManager.VolumeReductionFactor;
-                        audioLevelField.SetValue(__instance, newAudioLevel);
+                        __instance.audioLevel = audioLevel * ConfigurationManager.VolumeReductionFactor;
                     }
                 }
             }
@@ -108,17 +102,11 @@ namespace PEAKSleepTalk
             private static void Postfix(CharacterVoiceHandler __instance, PlayerConsciousnessManager.ConsciousState __state)
             {
                 // restore unconscious state
-                FieldInfo CharacterField = AccessTools.Field(typeof(CharacterVoiceHandler), "m_character");
-                Character character = (Character)CharacterField.GetValue(__instance);
-                character.data.passedOut = __state.passedOut;
-                character.data.fullyPassedOut = __state.fullyPassedOut;
+                __instance.m_character.data.passedOut = __state.passedOut;
+                __instance.m_character.data.fullyPassedOut = __state.fullyPassedOut;
 
-                if (!character.data.dead && (character.data.passedOut || character.data.fullyPassedOut))
-                {
-                    // restore audio level
-                    FieldInfo audioLevelField = AccessTools.Field(typeof(CharacterVoiceHandler), "audioLevel");
-                    audioLevelField.SetValue(__instance, audioLevel);
-                }
+                // restore audio level
+                __instance.audioLevel = audioLevel;
             }
         }
     }
