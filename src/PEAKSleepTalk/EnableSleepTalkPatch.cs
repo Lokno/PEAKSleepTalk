@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
-
 namespace PEAKSleepTalk
 {
     internal class EnableSleepTalkPatch
