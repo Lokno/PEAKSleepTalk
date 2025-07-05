@@ -1,6 +1,7 @@
 # PEAKSleepTalk
 
 Mod for the game PEAK that enables passed out scouts to talk at a reduced volume. They are still unable to speak for a short period after fainting.
+
 You can configure the amount of volume reduction and duration of quiet time in the configuration file (...\PEAK\BepInEx\config\com.github.lokno.PEAKSleepTalk.cfg)
 
 Created using the BepInEx Template for PEAK (https://github.com/PEAKModding/BepInExTemplate)
