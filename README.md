@@ -2,7 +2,7 @@
 
 Mod for the game PEAK that enables passed out scouts to talk at a reduced volume. They are still unable to speak for a short period after fainting.
 
-You can configure the amount of volume reduction and duration of quiet time in the configuration file (...\PEAK\BepInEx\config\com.github.lokno.PEAKSleepTalk.cfg)
+You can configure the amount of volume reduction and duration of quiet time in the configuration file.
 
 Created using the BepInEx Template for PEAK (https://github.com/PEAKModding/BepInExTemplate)
 
@@ -23,7 +23,7 @@ Every scout needs to install this mod for it to work
 
 4.) Download the mod from Thunderstore (https://thunderstore.io/c/peak/p/Lokno/PEAKSleepTalk/)
 
-5.) Unzip the zip archive (.zip) into ...\PEAK\BepInEx\plugins
+5.) Unzip the zip archive into ...\PEAK\BepInEx\plugins
 
 6.) Run the game
 
