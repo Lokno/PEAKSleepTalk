@@ -4,6 +4,8 @@ Mod for the game PEAK that enables passed out scouts to talk at a reduced volume
 
 You can configure the amount of volume reduction and duration of quiet time in the configuration file.
 
+You can also disable spectating others while passed out in the configuration file (`AllowSpectate`). You will still spectate yourself while down, but will be unable to switch to other players.
+
 Created using the BepInEx Template for PEAK (https://github.com/PEAKModding/BepInExTemplate)
 
 Thunderstore: https://thunderstore.io/c/peak/p/Lokno/PEAKSleepTalk/

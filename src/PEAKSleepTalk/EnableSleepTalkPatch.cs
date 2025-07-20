@@ -118,5 +118,24 @@ namespace PEAKSleepTalk
                 __instance.audioLevel = __state.audioLevel;
             }
         }
+
+        [HarmonyPatch(typeof(MainCameraMovement))]
+        public class PassedOutSpectatePatch
+        {
+            [HarmonyPatch(nameof(MainCameraMovement.HandleSpecSelection))]
+            private static void Prefix(MainCameraMovement __instance, out float __state)
+            {
+                __state = __instance.sinceSwitch;
+                if ((bool)Character.localCharacter && !Character.localCharacter.data.dead && !ConfigurationManager.AllowSpectate)
+                {
+                    __instance.sinceSwitch = 0.0f;
+                }
+            }
+            [HarmonyPatch(nameof(MainCameraMovement.HandleSpecSelection))]
+            private static void Postfix(MainCameraMovement __instance, float __state)
+            {
+                __instance.sinceSwitch = __state;
+            }
+        }
     }
 }

@@ -10,11 +10,13 @@ namespace PEAKSleepTalk
         private static ConfigEntry<float> _configReductionFactor = null!;
         private static ConfigEntry<bool> _configEnableQuietTime = null!;
         private static ConfigEntry<float> _configQuietTime = null!;
+        private static ConfigEntry<bool> _configAllowSpectate = null!;
 
         public static bool ReduceVolume => _configEnableReduceVolume.Value;
         public static float VolumeReductionFactor => Math.Clamp(_configReductionFactor.Value, 0.0f, 1.0f);
         public static bool EnableQuietTime => _configEnableQuietTime.Value;
         public static float QuietTimeDuration => _configQuietTime.Value;
+        public static bool AllowSpectate => _configAllowSpectate.Value;
 
         public static void LoadConfig(BaseUnityPlugin plugin)
         {
@@ -48,6 +50,14 @@ namespace PEAKSleepTalk
                 "QuietTimeDuration",
                 8.0f,
                 "The time in seconds before unconscious players can speak again"
+            );
+
+            _configAllowSpectate = plugin.Config.Bind<bool>
+            (
+                "General",
+                "AllowSpectate",
+                true,
+                "Allow unconscious players to spectate others"
             );
         }
     }
