@@ -129,6 +129,7 @@ namespace PEAKSleepTalk
                 if ((bool)Character.localCharacter && !Character.localCharacter.data.dead && !ConfigurationManager.AllowSpectate)
                 {
                     __instance.sinceSwitch = 0.0f;
+                    MainCameraMovement.specCharacter = Character.localCharacter;
                 }
             }
             [HarmonyPatch(nameof(MainCameraMovement.HandleSpecSelection))]
