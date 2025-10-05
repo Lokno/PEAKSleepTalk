@@ -17,7 +17,6 @@ Every scout needs to install this mod for it to work
 ### Manual Installation
 
 1.) Download BepInEx (https://github.com/BepInEx/BepInEx/releases/download/v5.4.23.3/BepInEx_win_x64_5.4.23.3.zip)
-    Download and compile this mod (Precompiled dll coming soon)
 
 2.) Extract the contents of the zip archive into the PEAK game directory (default: "C:\Program Files (x86)\Steam\steamapps\common\PEAK")
 
